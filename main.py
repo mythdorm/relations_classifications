@@ -23,6 +23,8 @@ def main():
     result = relations.make_antisymmetric([[0, 1, 0], [1, 0, 1], [0, 0, 0]])
     for row in result:
         print(row)
+    result = relations.check_transitive([[0,1,0],[1,1,0],[0,0,0]])
+    print(result)
 
 if __name__ == '__main__':
     main()

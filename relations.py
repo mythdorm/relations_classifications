@@ -110,3 +110,14 @@ def check_asymmetric(matrix):
 
 def make_asymmetric(matrix):
     return make_antisymmetric(make_irreflexive(matrix))
+
+def check_transitive(matrix):
+    transitive = True
+    matrix_length = len(matrix)
+    for k in range(matrix_length):
+        for j in range(matrix_length):
+            for i in range(matrix_length):
+                if (matrix[i][j] == 0) and (matrix[i][k]== 1 and matrix[k][j]== 1):
+                    transitive = False
+
+    return transitive
