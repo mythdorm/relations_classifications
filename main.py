@@ -20,6 +20,9 @@ def main():
     result = relations.make_symmetric([[0,1,0],[0,0,0],[0,0,0]])
     for row in result:
         print(row)
+    result = relations.make_antisymmetric([[0, 1, 0], [1, 0, 1], [0, 0, 0]])
+    for row in result:
+        print(row)
 
 if __name__ == '__main__':
     main()

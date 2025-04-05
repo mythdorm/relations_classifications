@@ -73,13 +73,40 @@ def make_symmetric(matrix):
     return matrix_copy
 
 def check_antisymmetric(matrix):
-    pass
+    antisymmetric = True
+    for row in range(len(matrix)):
+        for col in range(len(matrix)):
+            if matrix[row][col] == 1 and matrix[col][row] == 1:
+                antisymmetric = False
 
+    return antisymmetric
+
+# This version of antisymmetry converts just one value to a 0 if the algorithm finds symmetry
 def make_antisymmetric(matrix):
-    pass
+    matrix_copy = matrix
+    for row in range(len(matrix)):
+        for col in range(len(matrix)):
+            if matrix[row][col] == 1 and matrix[col][row] == 1:
+                matrix_copy[col][row] = 0
+
+    return matrix_copy
+
+# This version, however, removes both instance of symmetry from the matrix
+def make_antisymmetric_double(matrix):
+    missing_values = []
+
+    for row in range(len(matrix)):
+        for col in range(len(matrix)):
+            if matrix[row][col] == 1 and matrix[col][row] == 1:
+                missing_values.append([col, row])
+
+    matrix_copy = matrix
+    for missing in missing_values:
+        matrix_copy[missing[0]][missing[1]] = 0
+    return matrix_copy
 
 def check_asymmetric(matrix):
     return check_antisymmetric(matrix) and check_irreflexive(matrix)
 
 def make_asymmetric(matrix):
-    pass
+    return make_antisymmetric(make_irreflexive(matrix))
