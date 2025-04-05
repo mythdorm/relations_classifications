@@ -121,3 +121,15 @@ def check_transitive(matrix):
                     transitive = False
 
     return transitive
+
+def make_transitive(matrix):
+    transitive = True
+    matrix_copy = matrix
+    matrix_length = len(matrix)
+    for k in range(matrix_length):
+        for j in range(matrix_length):
+            for i in range(matrix_length):
+                if (matrix[i][j] == 0) and (matrix[i][k] == 1 and matrix[k][j] == 1):
+                    matrix_copy[i][j] = 1
+
+    return matrix_copy

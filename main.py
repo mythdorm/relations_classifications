@@ -25,6 +25,12 @@ def main():
         print(row)
     result = relations.check_transitive([[0,1,0],[1,1,0],[0,0,0]])
     print(result)
+    result = relations.make_transitive([[0, 1, 0], [1, 0, 0], [0, 0, 0]])
+    for row in result:
+        print(row)
+    result = relations.make_transitive([[0, 0, 1, 0], [1, 0, 0, 1], [0, 0, 0, 0], [0, 1, 0, 0]])
+    for row in result:
+        print(row)
 
 if __name__ == '__main__':
     main()
