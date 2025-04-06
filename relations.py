@@ -133,3 +133,13 @@ def make_transitive(matrix):
                     matrix_copy[i][j] = 1
 
     return matrix_copy
+
+def check_equivalence(matrix):
+    return check_transitive(matrix) and check_reflexive(matrix) and check_symmetric(matrix)
+
+def make_equivalence(matrix):
+    matrix_copy = matrix
+    matrix_copy = make_transitive(matrix_copy)
+    matrix_copy = make_symmetric(matrix_copy)
+    matrix_copy = make_reflexive(matrix_copy)
+    return matrix_copy
