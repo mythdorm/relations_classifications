@@ -23,6 +23,8 @@ class MatrixOperators(BoxLayout):
         self.all_button = AllButton()
         self.add_widget(self.all_button)
         self.add_widget(OptionSpinner(self.all_button))
+        self.add_widget(FixerButton())
+        self.add_widget(FixerSpinner())
 
 class AllButton(Button):
     instance = App.get_running_app()
@@ -56,22 +58,25 @@ class AllButton(Button):
             result.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         elif option == "Reflexive":
             reflexive = relations.check_reflexive(matrix)
-            result = Label(text=f"{reflexive}")
+            result = Label(text=f"Reflexive: {reflexive}")
         elif option == "Irreflexive":
             irreflexive = relations.check_irreflexive(matrix)
-            result = Label(text=f"{irreflexive}")
+            result = Label(text=f"Irreflexive: {irreflexive}")
         elif option == "Symmetric":
             symmetric = relations.check_symmetric(matrix)
-            result = Label(text=f"{symmetric}")
+            result = Label(text=f"Symmetric: {symmetric}")
         elif option == "Asymmetric":
             asymmetric = relations.check_asymmetric(matrix)
-            result = Label(text=f"{asymmetric}")
+            result = Label(text=f"Asymmetric: {asymmetric}")
         elif option == 'Antisymmetric':
             antisymmetric = relations.check_antisymmetric(matrix)
-            result = Label(text=f"{antisymmetric}")
+            result = Label(text=f"Antisymmetric: {antisymmetric}")
         elif option == 'Transitive':
             transitive = relations.check_transitive(matrix)
-            result = Label(text=f"{transitive}")
+            result = Label(text=f"Transitive: {transitive}")
+        elif option == 'Equivalence':
+            equivalence = relations.check_equivalence(matrix)
+            result = Label(text=f"Equivalence: {equivalence}")
         instance.root.ids.something.add_widget(result)
 
     def on_press(self):
@@ -79,6 +84,123 @@ class AllButton(Button):
         matrix = instance.matrix
         option = self.check_spinner()
         self.choose_option(option, matrix)
+
+class FixerSpinner(Spinner):
+    def __init__(self, **kwargs):
+        super(FixerSpinner, self).__init__(**kwargs)
+        self.text = "Fix Matrix"
+        self.values = ('Reflexive', 'Irreflexive', 'Symmetric', 'Antisymmetric', 'Asymmetric', 'Transitive', 'Equivalence')
+
+    def on_text(self, instance, value):
+        instance = App.get_running_app()
+        instance.fix_option = self.text
+
+class FixerButton(AllButton):
+    def __init__(self, **kwargs):
+        super(FixerButton, self).__init__(**kwargs)
+        self.text = 'Fix'
+
+    def check_differences(self, matrix, new_matrix):
+        changes = []
+        if not matrix == new_matrix:
+            for row in range(len(matrix)):
+                if not matrix[row] == new_matrix[row]:
+                    for col in range(len(matrix[row])):
+                        if not matrix[row][col] == new_matrix[row][col]:
+                            changed = f"{matrix[row][col]} --> {new_matrix[row][col]}"
+                            changes.append([(row, col), changed])
+        print(changes)
+        return changes
+
+    def choose_option(self, option, matrix):
+        instance = App.get_running_app()
+        new_matrix = [row[:] for row in matrix]
+        most_recent = instance.root.ids.something.children[0]
+        if isinstance(most_recent, kivy.uix.label.Label):
+            instance.root.ids.something.remove_widget(most_recent)
+        result = Label(text="Something went wrong and the result wasn't calculated.", color=(173/225, 2/225, 2/225, 1))
+        if option == "Fix Matrix":
+            result = Label(text="An option must first be picked to fix a matrix.", color=(173/225, 2/225, 2/225, 1))
+        if option == "Reflexive":
+            new_matrix = relations.make_reflexive(new_matrix)
+            for row in matrix:
+                print(row)
+            for row in new_matrix:
+                print(row)
+            changed = self.check_differences(matrix, new_matrix)
+            result_text = "Updated matrix with:\n"
+            if len(changed) > 0:
+                for difference in changed:
+                    result_text += f"{difference[0]}: {difference[1]}\n"
+            else:
+                result_text = "No changes"
+            result = Label(text=result_text)
+        elif option == "Irreflexive":
+            new_matrix = relations.make_irreflexive(new_matrix)
+            changed = self.check_differences(matrix, new_matrix)
+            result_text = "Updated matrix with:\n"
+            if len(changed) > 0:
+                for difference in changed:
+                    result_text += f"{difference[0]}: {difference[1]}\n"
+            else:
+                result_text = "No changes"
+            result = Label(text=result_text)
+        elif option == "Symmetric":
+            new_matrix = relations.make_symmetric(new_matrix)
+            changed = self.check_differences(matrix, new_matrix)
+            result_text = "Updated matrix with:\n"
+            if len(changed) > 0:
+                for difference in changed:
+                    result_text += f"{difference[0]}: {difference[1]}\n"
+            else:
+                result_text = "No changes"
+            result = Label(text=result_text)
+        elif option == "Asymmetric":
+            new_matrix = relations.make_asymmetric(new_matrix)
+            changed = self.check_differences(matrix, new_matrix)
+            result_text = "Updated matrix with:\n"
+            if len(changed) > 0:
+                for difference in changed:
+                    result_text += f"{difference[0]}: {difference[1]}\n"
+            else:
+                result_text = "No changes"
+            result = Label(text=result_text)
+        elif option == 'Antisymmetric':
+            new_matrix = relations.make_antisymmetric(new_matrix)
+            changed = self.check_differences(matrix, new_matrix)
+            result_text = "Updated matrix with:\n"
+            if len(changed) > 0:
+                for difference in changed:
+                    result_text += f"{difference[0]}: {difference[1]}\n"
+            else:
+                result_text = "No changes"
+            result = Label(text=result_text)
+        elif option == 'Transitive':
+            new_matrix = relations.make_transitive(new_matrix)
+            changed = self.check_differences(matrix, new_matrix)
+            result_text = "Updated matrix with:\n"
+            if len(changed) > 0:
+                for difference in changed:
+                    result_text += f"{difference[0]}: {difference[1]}\n"
+            else:
+                result_text = "No changes"
+            result = Label(text=result_text)
+        elif option == 'Equivalence':
+            new_matrix = relations.make_equivalence(new_matrix)
+            changed = self.check_differences(matrix, new_matrix)
+            result_text = "Updated matrix with:\n"
+            if len(changed) > 0:
+                for difference in changed:
+                    result_text += f"{difference[0]}: {difference[1]}\n"
+            else:
+                result_text = "No changes"
+            result = Label(text=result_text)
+
+        instance.root.ids.something.add_widget(result)
+
+    def check_spinner(self):
+        instance = App.get_running_app()
+        return instance.fix_option
 
 class OptionSpinner(Spinner):
     def __init__(self, all_button, **kwargs):
@@ -90,8 +212,6 @@ class OptionSpinner(Spinner):
 
     def on_text(self, instance, value):
         instance = App.get_running_app()
-        # if not hasattr(root, 'ids') or 'all_button' not in root.ids:
-        #     return  # Too early, or the button doesn't exist
         if not self.text == 'Check Matrix' and not self.text == 'All':
             self.all_button.text = 'Confirm'
         else:
@@ -100,9 +220,9 @@ class OptionSpinner(Spinner):
 
 class MatrixElement(Button):
 
-    def __init__(self, row, col, **kwargs):
+    def __init__(self, row, col, value, **kwargs):
         super().__init__(**kwargs)
-        self.text = str(0)
+        self.text = str(value)
         self.id = f"{row} {col}"
 
     def on_press(self, *args):
@@ -117,11 +237,11 @@ class MatrixElement(Button):
             self.text = '0'
 
 class MatrixLayout(BoxLayout):
-    def __init__(self, width, row_pos, **kwargs):
+    def __init__(self, width, row_pos, matrix, **kwargs):
         super().__init__(**kwargs)
         self.orientation = 'horizontal'
         for i in range(width):
-            self.add_widget(MatrixElement(row_pos, i))
+            self.add_widget(MatrixElement(row_pos, i, matrix[row_pos][i]))
 
 class RelationsCalcApp(App):
     matrix_size = 0
@@ -129,16 +249,8 @@ class RelationsCalcApp(App):
 
     def build(self):
         inspector.create_inspector(Window, self)
-
-    def form_matrix(self, text):
-        self.matrix_size = size = int(text)
-        matrix = []
-        for i in range(size):
-            matrix.append([])
-            for j in range(size):
-                matrix[i].append(0)
-        self.matrix = matrix
-        self.change_view()
+        self.matrix = []
+        self.matrix_size = 0
 
     def create_matrix(self, text):
         if int(text) <= 0:
@@ -152,12 +264,21 @@ class RelationsCalcApp(App):
                 layout.remove_widget(child)
             self.form_matrix(text)
 
+    def form_matrix(self, text):
+        self.matrix_size = size = int(text)
+        matrix = []
+        for i in range(size):
+            matrix.append([])
+            for j in range(size):
+                matrix[i].append(0)
+        self.matrix = matrix
+        self.change_view()
+
     def change_view(self):
         matrix_copy = self.matrix
         for row in range(len(matrix_copy)):
-            self.root.ids.something.add_widget(MatrixLayout(self.matrix_size, row))
+            self.root.ids.something.add_widget(MatrixLayout(self.matrix_size, row, self.matrix))
         self.root.ids.something.add_widget(MatrixOperators())
-
 
 
 def main():
@@ -193,9 +314,13 @@ def main():
         print(row)
     result = relations.check_transitive([[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 0, 0]])
     print(result)
+    matrix_1 = [[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 0, 0]]
+    matrix_2 = [[1, 0, 0, 1], [1, 0, 1, 0], [1, 1, 0, 1], [1, 0, 1, 0]]
+    # changes = check_differences(matrix_1, matrix_2)
+    # print(f"changes: {changes}")
 
 
 if __name__ == '__main__':
-    main()
+    # main()
     app = RelationsCalcApp()
     app.run()
