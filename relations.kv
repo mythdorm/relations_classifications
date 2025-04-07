@@ -1,0 +1,6 @@
+ScrollView:
+    TextInput:
+        id: creation
+        hint_text: "matrix size"
+        multiline: False
+        on_text_validate: app.create_matrix(f"{self.text}")
