@@ -1,0 +1,20 @@
+ScrollView
+
+    BoxLayout:
+        orientation: 'vertical'
+        id: something
+        size_hint: (1, None)
+        height: sum(child.height for child in self.children)
+        TextInput:
+            id: creation
+            input_filter: 'int'
+            hint_text: "matrix size"
+            valign: "middle"
+            halign: 'center'
+            padding: [0, (self.height - self.line_height) / 2]
+            font_size: 25
+            multiline: False
+            on_text_validate: app.create_matrix(f"{self.text}")
+
+<AllButton>:
+    id: all_button
