@@ -84,7 +84,7 @@ class AllButton(Button):
 class FixerSpinner(Spinner):
     def __init__(self, **kwargs):
         super(FixerSpinner, self).__init__(**kwargs)
-        self.text = "Fix Matrix"
+        self.text = "Matrix Closure"
         self.values = ('Reflexive', 'Irreflexive', 'Symmetric', 'Antisymmetric', 'Asymmetric', 'Transitive', 'Equivalence')
 
     def on_text(self, instance, value):
@@ -116,7 +116,7 @@ class FixerButton(AllButton):
         if isinstance(most_recent, kivy.uix.label.Label):
             instance.root.ids.something.remove_widget(most_recent)
         result.text = "Something went wrong and the result wasn't calculated."
-        if option == "Fix Matrix":
+        if option == "Matrix Closure":
             result.text = "An option must first be picked to fix a matrix."
             result.color = (173/225, 2/225, 2/225, 1)
         if option == "Reflexive":
