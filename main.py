@@ -109,24 +109,22 @@ class FixerButton(AllButton):
                         if not matrix[row][col] == new_matrix[row][col]:
                             changed = f"{matrix[row][col]} --> {new_matrix[row][col]}"
                             changes.append([(row, col), changed])
-        print(changes)
         return changes
 
     def choose_option(self, option, matrix):
         instance = App.get_running_app()
         new_matrix = [row[:] for row in matrix]
+        changed = []
+        result = Label()
         most_recent = instance.root.ids.something.children[0]
         if isinstance(most_recent, kivy.uix.label.Label):
             instance.root.ids.something.remove_widget(most_recent)
-        result = Label(text="Something went wrong and the result wasn't calculated.", color=(173/225, 2/225, 2/225, 1))
+        result.text = "Something went wrong and the result wasn't calculated."
         if option == "Fix Matrix":
-            result = Label(text="An option must first be picked to fix a matrix.", color=(173/225, 2/225, 2/225, 1))
+            result.text = "An option must first be picked to fix a matrix."
+            result.color = (173/225, 2/225, 2/225, 1)
         if option == "Reflexive":
             new_matrix = relations.make_reflexive(new_matrix)
-            for row in matrix:
-                print(row)
-            for row in new_matrix:
-                print(row)
             changed = self.check_differences(matrix, new_matrix)
             result_text = "Updated matrix with:\n"
             if len(changed) > 0:
@@ -134,7 +132,7 @@ class FixerButton(AllButton):
                     result_text += f"{difference[0]}: {difference[1]}\n"
             else:
                 result_text = "No changes"
-            result = Label(text=result_text)
+            result.text = result_text
         elif option == "Irreflexive":
             new_matrix = relations.make_irreflexive(new_matrix)
             changed = self.check_differences(matrix, new_matrix)
@@ -144,7 +142,7 @@ class FixerButton(AllButton):
                     result_text += f"{difference[0]}: {difference[1]}\n"
             else:
                 result_text = "No changes"
-            result = Label(text=result_text)
+            result.text = result_text
         elif option == "Symmetric":
             new_matrix = relations.make_symmetric(new_matrix)
             changed = self.check_differences(matrix, new_matrix)
@@ -154,7 +152,7 @@ class FixerButton(AllButton):
                     result_text += f"{difference[0]}: {difference[1]}\n"
             else:
                 result_text = "No changes"
-            result = Label(text=result_text)
+            result.text = result_text
         elif option == "Asymmetric":
             new_matrix = relations.make_asymmetric(new_matrix)
             changed = self.check_differences(matrix, new_matrix)
@@ -164,7 +162,7 @@ class FixerButton(AllButton):
                     result_text += f"{difference[0]}: {difference[1]}\n"
             else:
                 result_text = "No changes"
-            result = Label(text=result_text)
+            result.text = result_text
         elif option == 'Antisymmetric':
             new_matrix = relations.make_antisymmetric(new_matrix)
             changed = self.check_differences(matrix, new_matrix)
@@ -174,7 +172,7 @@ class FixerButton(AllButton):
                     result_text += f"{difference[0]}: {difference[1]}\n"
             else:
                 result_text = "No changes"
-            result = Label(text=result_text)
+            result.text = result_text
         elif option == 'Transitive':
             new_matrix = relations.make_transitive(new_matrix)
             changed = self.check_differences(matrix, new_matrix)
@@ -184,7 +182,7 @@ class FixerButton(AllButton):
                     result_text += f"{difference[0]}: {difference[1]}\n"
             else:
                 result_text = "No changes"
-            result = Label(text=result_text)
+            result.text = result_text
         elif option == 'Equivalence':
             new_matrix = relations.make_equivalence(new_matrix)
             changed = self.check_differences(matrix, new_matrix)
@@ -194,12 +192,47 @@ class FixerButton(AllButton):
                     result_text += f"{difference[0]}: {difference[1]}\n"
             else:
                 result_text = "No changes"
-            result = Label(text=result_text)
+            result.text = result_text
 
+        result.size_hint_y = None
+        result.text_size = (300, None)
+        result.font_size = 20
+        result.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
+        self.fix_matrix(changed)
         instance.root.ids.something.add_widget(result)
+        instance.matrix = new_matrix
+
+    def fix_matrix(self, changes):
+       if changes:
+            coordinate_list =[]
+            for change in changes:
+                pos = change[0]
+                coordinates = ''
+                for coord in pos:
+                    coordinates += f"{coord} "
+                coordinate_list.append(coordinates)
+            root = App.get_running_app().root
+            for child in root.ids.something.children:
+                if isinstance(child, MatrixLayout):
+                    for element in child.children:
+                        if element.id in coordinate_list:
+                            if int(element.text) == 0:
+                                element.text = str(1)
+                            else:
+                                element.text = str(0)
+                            element.background_color = (135/255, 165/255, 207/255, 1)
+
+    def reset_matrix_looks(self):
+        root = App.get_running_app().root
+        for child in root.ids.something.children:
+            if isinstance(child, MatrixLayout):
+                for element in child.children:
+                    if  element.background_color == [135/255, 165/255, 207/255, 1]:
+                        element.background_color = (1, 1, 1, 1)
 
     def check_spinner(self):
         instance = App.get_running_app()
+        self.reset_matrix_looks()
         return instance.fix_option
 
 class OptionSpinner(Spinner):
@@ -223,7 +256,7 @@ class MatrixElement(Button):
     def __init__(self, row, col, value, **kwargs):
         super().__init__(**kwargs)
         self.text = str(value)
-        self.id = f"{row} {col}"
+        self.id = f"{row} {col} "
 
     def on_press(self, *args):
         instance = App.get_running_app()
