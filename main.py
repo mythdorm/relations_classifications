@@ -1,7 +1,3 @@
-from os import wait3
-
-from kivy.app import App
-from kivy.properties import StringProperty, Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
