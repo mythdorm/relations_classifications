@@ -313,47 +313,6 @@ class RelationsCalcApp(App):
             self.root.ids.something.add_widget(MatrixLayout(self.matrix_size, row, self.matrix))
         self.root.ids.something.add_widget(MatrixOperators())
 
-
-def main():
-    result = relations.check_reflexive([[1,0,0],[0,1,0],[0,0,1]])
-    print(result)
-    result = relations.check_irreflexive([[0,1,0],[0,0,0],[0,1,0]])
-    print(result)
-    result = relations.make_reflexive([[1,0,0],[0,1,0],[0,0,0]])
-    for row in result:
-        print(row)
-    result = relations.make_reflexive([[1, 0, 0,0], [0, 1, 0,1], [0, 0, 0, 0], [0, 0, 0, 0]])
-    for row in result:
-        print(row)
-    result = relations.check_symmetric([[0,1,0],[0,0,0],[0,0,0]])
-    print(result)
-    result = relations.check_symmetric([[0, 1, 0], [1, 0, 0], [0, 0, 0]])
-    print(result)
-    for row in [[0, 1, 0], [1, 0, 0], [0, 0, 0]]:
-        print(row)
-    result = relations.make_symmetric([[0,1,0],[0,0,0],[0,0,0]])
-    for row in result:
-        print(row)
-    result = relations.make_antisymmetric([[0, 1, 0], [1, 0, 1], [0, 0, 0]])
-    for row in result:
-        print(row)
-    result = relations.check_transitive([[0,1,0],[1,1,0],[0,0,0]])
-    print(result)
-    result = relations.make_transitive([[0, 1, 0], [1, 0, 0], [0, 0, 0]])
-    for row in result:
-        print(row)
-    result = relations.make_transitive([[1, 0, 0, 1], [1, 0, 1, 0], [1, 1, 0, 1], [1, 0, 1, 0]])
-    for row in result:
-        print(row)
-    result = relations.check_transitive([[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 0, 0]])
-    print(result)
-    matrix_1 = [[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 0, 0]]
-    matrix_2 = [[1, 0, 0, 1], [1, 0, 1, 0], [1, 1, 0, 1], [1, 0, 1, 0]]
-    # changes = check_differences(matrix_1, matrix_2)
-    # print(f"changes: {changes}")
-
-
 if __name__ == '__main__':
-    # main()
     app = RelationsCalcApp()
     app.run()
