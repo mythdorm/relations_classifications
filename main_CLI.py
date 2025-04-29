@@ -1,4 +1,3 @@
-import sys
 
 import relations
 
@@ -73,11 +72,11 @@ def get_operation(answer):
             else:
                 getting_operation = False
         except ValueError:
-            print("Please enter a number in integer format.", file=sys.stderr)
+            print("Please enter a number in integer format.")
     return answer
 
 def print_check_result(result, build):
-    if result == True:
+    if result:
         print(f"The matrix is {build[6:]}")
     else:
         print(f"The matrix is not {build[6:]}")
