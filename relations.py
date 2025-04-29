@@ -5,7 +5,7 @@ def check_reflexive(matrix):
         # row_pos = matrix.index(row)
         for col in range(len(matrix)):
             # col_pos = row.index(col)
-            if row == col and not matrix[row][col] == 1:
+            if row == col and not int(matrix[row][col]) == 1:
                 reflexive = False
 
 
@@ -16,7 +16,7 @@ def make_reflexive(matrix):
     if not check_reflexive(matrix):
         for row in range(len(matrix)):
             for col in range(len(matrix)):
-                if row == col and not matrix[row][col] == 1:
+                if row == col and not int(matrix[row][col]) == 1:
                     missing_values.append([row, col])
 
     matrix_copy = matrix
@@ -32,17 +32,17 @@ def check_irreflexive(matrix):
         # row_pos = matrix.index(row)
         for col in range(len(matrix)):
             # col_pos = row.index(col)
-            if row == col and not matrix[row][col] == 0:
+            if row == col and not int(matrix[row][col]) == 0:
                 irreflexive = False
 
     return irreflexive
 
 def make_irreflexive(matrix):
     missing_values = []
-    if not check_reflexive(matrix):
+    if not check_irreflexive(matrix):
         for row in range(len(matrix)):
             for col in range(len(matrix)):
-                if row == col and not matrix[row][col] == 0:
+                if row == col and not int(matrix[row][col]) == 0:
                     missing_values.append([row, col])
 
     matrix_copy = matrix
@@ -55,7 +55,7 @@ def check_symmetric(matrix):
     symmetric = True
     for row in range(len(matrix)):
         for col in range(len(matrix)):
-            if matrix[row][col] == 1 and matrix[col][row] == 0:
+            if int(matrix[row][col]) == 1 and int(matrix[col][row]) == 0:
                 symmetric = False
 
     return symmetric
@@ -64,7 +64,7 @@ def make_symmetric(matrix):
     missing_values = []
     for row in range(len(matrix)):
         for col in range(len(matrix)):
-            if matrix[row][col] == 1 and matrix[col][row] == 0:
+            if int(matrix[row][col]) == 1 and int(matrix[col][row]) == 0:
                 missing_values.append([col, row])
 
     matrix_copy = matrix
@@ -76,7 +76,7 @@ def check_antisymmetric(matrix):
     antisymmetric = True
     for row in range(len(matrix)):
         for col in range(len(matrix)):
-            if matrix[row][col] == 1 and matrix[col][row] == 1:
+            if int(matrix[row][col]) == 1 and int(matrix[col][row]) == 1:
                 antisymmetric = False
 
     return antisymmetric
@@ -86,7 +86,7 @@ def make_antisymmetric(matrix):
     matrix_copy = matrix
     for row in range(len(matrix)):
         for col in range(len(matrix)):
-            if matrix[row][col] == 1 and matrix[col][row] == 1:
+            if int(matrix[row][col]) == 1 and int(matrix[col][row]) == 1:
                 matrix_copy[col][row] = 0
 
     return matrix_copy
@@ -97,7 +97,7 @@ def make_antisymmetric_double(matrix):
 
     for row in range(len(matrix)):
         for col in range(len(matrix)):
-            if matrix[row][col] == 1 and matrix[col][row] == 1:
+            if int(matrix[row][col]) == 1 and int(matrix[col][row]) == 1:
                 missing_values.append([col, row])
 
     matrix_copy = matrix
@@ -117,7 +117,7 @@ def check_transitive(matrix):
     for k in range(matrix_length):
         for j in range(matrix_length):
             for i in range(matrix_length):
-                if (matrix[i][j] == 0) and (matrix[i][k]== 1 and matrix[k][j]== 1):
+                if (int(matrix[i][j]) == 0) and (int(matrix[i][k]) == 1 and int(matrix[k][j])== 1):
                     transitive = False
 
     return transitive
@@ -129,7 +129,7 @@ def make_transitive(matrix):
     for k in range(matrix_length):
         for j in range(matrix_length):
             for i in range(matrix_length):
-                if (matrix[i][j] == 0) and (matrix[i][k] == 1 and matrix[k][j] == 1):
+                if (int(matrix[i][j]) == 0) and (int(matrix[i][k]) == 1 and int(matrix[k][j])== 1):
                     matrix_copy[i][j] = 1
 
     return matrix_copy
