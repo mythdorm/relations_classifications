@@ -76,7 +76,7 @@ def check_antisymmetric(matrix):
     antisymmetric = True
     for row in range(len(matrix)):
         for col in range(len(matrix)):
-            if int(matrix[row][col]) == 1 and int(matrix[col][row]) == 1:
+            if int(matrix[row][col]) == 1 and int(matrix[col][row]) == 1 and row != col:
                 antisymmetric = False
 
     return antisymmetric
@@ -86,7 +86,7 @@ def make_antisymmetric(matrix):
     matrix_copy = matrix
     for row in range(len(matrix)):
         for col in range(len(matrix)):
-            if int(matrix[row][col]) == 1 and int(matrix[col][row]) == 1:
+            if int(matrix[row][col]) == 1 and int(matrix[col][row]) == 1 and row != col:
                 matrix_copy[col][row] = 0
 
     return matrix_copy
