@@ -139,7 +139,18 @@ def check_equivalence(matrix):
 
 def make_equivalence(matrix):
     matrix_copy = matrix
-    matrix_copy = make_transitive(matrix_copy)
-    matrix_copy = make_symmetric(matrix_copy)
     matrix_copy = make_reflexive(matrix_copy)
+    matrix_copy = make_symmetric(matrix_copy)
+    matrix_copy = make_transitive(matrix_copy)
     return matrix_copy
+
+def check_differences(matrix, second_matrix):
+    changes = []
+    if not matrix == second_matrix:
+        for row in range(len(matrix)):
+            if not matrix[row] == second_matrix[row]:
+                for col in range(len(matrix[row])):
+                    if not matrix[row][col] == second_matrix[row][col]:
+                        changed = f"{matrix[row][col]} --> {second_matrix[row][col]}"
+                        changes.append([(row, col), changed])
+    return changes
