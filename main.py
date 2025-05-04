@@ -51,7 +51,9 @@ class AllButton(Button):
             result = Label(text=f"Reflexive: {reflexive}\nIrreflexive: {irreflexive}\nSymmetric: {symmetric}\n"
                                 f"Antisymmetric: {antisymmetric}\nAsymmetric: {asymmetric}\nTransitive: {transitive}\n"
                                 f"Equivalence: {equivalence}", size_hint_y=None, text_size=(300,None), font_size=25)
+
             result.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
+
         elif option == "Reflexive":
             reflexive = relations.check_reflexive(matrix)
             result = Label(text=f"Reflexive: {reflexive}")
@@ -96,17 +98,6 @@ class FixerButton(AllButton):
         super(FixerButton, self).__init__(**kwargs)
         self.text = 'Fix'
 
-    def check_differences(self, matrix, new_matrix):
-        changes = []
-        if not matrix == new_matrix:
-            for row in range(len(matrix)):
-                if not matrix[row] == new_matrix[row]:
-                    for col in range(len(matrix[row])):
-                        if not matrix[row][col] == new_matrix[row][col]:
-                            changed = f"{matrix[row][col]} --> {new_matrix[row][col]}"
-                            changes.append([(row, col), changed])
-        return changes
-
     def choose_option(self, option, matrix):
         instance = App.get_running_app()
         new_matrix = [row[:] for row in matrix]
@@ -121,7 +112,7 @@ class FixerButton(AllButton):
             result.color = (173/225, 2/225, 2/225, 1)
         if option == "Reflexive":
             new_matrix = relations.make_reflexive(new_matrix)
-            changed = self.check_differences(matrix, new_matrix)
+            changed = relations.check_differences(matrix, new_matrix)
             result_text = "Updated matrix with:\n"
             if len(changed) > 0:
                 for difference in changed:
@@ -131,7 +122,7 @@ class FixerButton(AllButton):
             result.text = result_text
         elif option == "Irreflexive":
             new_matrix = relations.make_irreflexive(new_matrix)
-            changed = self.check_differences(matrix, new_matrix)
+            changed = relations.check_differences(matrix, new_matrix)
             result_text = "Updated matrix with:\n"
             if len(changed) > 0:
                 for difference in changed:
@@ -141,7 +132,7 @@ class FixerButton(AllButton):
             result.text = result_text
         elif option == "Symmetric":
             new_matrix = relations.make_symmetric(new_matrix)
-            changed = self.check_differences(matrix, new_matrix)
+            changed = relations.check_differences(matrix, new_matrix)
             result_text = "Updated matrix with:\n"
             if len(changed) > 0:
                 for difference in changed:
@@ -151,7 +142,7 @@ class FixerButton(AllButton):
             result.text = result_text
         elif option == "Asymmetric":
             new_matrix = relations.make_asymmetric(new_matrix)
-            changed = self.check_differences(matrix, new_matrix)
+            changed = relations.check_differences(matrix, new_matrix)
             result_text = "Updated matrix with:\n"
             if len(changed) > 0:
                 for difference in changed:
@@ -161,7 +152,7 @@ class FixerButton(AllButton):
             result.text = result_text
         elif option == 'Antisymmetric':
             new_matrix = relations.make_antisymmetric(new_matrix)
-            changed = self.check_differences(matrix, new_matrix)
+            changed = relations.check_differences(matrix, new_matrix)
             result_text = "Updated matrix with:\n"
             if len(changed) > 0:
                 for difference in changed:
@@ -171,7 +162,7 @@ class FixerButton(AllButton):
             result.text = result_text
         elif option == 'Transitive':
             new_matrix = relations.make_transitive(new_matrix)
-            changed = self.check_differences(matrix, new_matrix)
+            changed = relations.check_differences(matrix, new_matrix)
             result_text = "Updated matrix with:\n"
             if len(changed) > 0:
                 for difference in changed:
@@ -181,7 +172,7 @@ class FixerButton(AllButton):
             result.text = result_text
         elif option == 'Equivalence':
             new_matrix = relations.make_equivalence(new_matrix)
-            changed = self.check_differences(matrix, new_matrix)
+            changed = relations.check_differences(matrix, new_matrix)
             result_text = "Updated matrix with:\n"
             if len(changed) > 0:
                 for difference in changed:
@@ -308,6 +299,7 @@ class RelationsCalcApp(App):
         for row in range(len(matrix_copy)):
             self.root.ids.something.add_widget(MatrixLayout(self.matrix_size, row, self.matrix))
         self.root.ids.something.add_widget(MatrixOperators())
+        self.root.ids.something.add_widget(Label(size_hint=(.05, .05)))
 
 if __name__ == '__main__':
     app = RelationsCalcApp()
